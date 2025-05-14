@@ -14,7 +14,7 @@ config.json
 test/
 
 # test
-game.js
+#game.js
 
 # モデルコンテキストプロトコル
 mcp.json

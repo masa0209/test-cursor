@@ -31,19 +31,36 @@ const ball = {
 
 // ブロックの設定
 const blockRowCount = 5;
-const blockColumnCount = 8;
-const blockWidth = 80;
-const blockHeight = 20;
-const blockPadding = 10;
+const blockColumnCount = 10;
+const blockPadding = 8;
+const blockWidth = Math.floor((canvas.width - (blockColumnCount - 1) * blockPadding - 2 * 8) / blockColumnCount);
+const blockHeight = 24;
 const blockOffsetTop = 30;
-const blockOffsetLeft = 35;
+const blockOffsetLeft = 8;
 
+// カラフルな色リスト
+const blockColors = [
+  '#e57373', // 赤
+  '#f06292', // ピンク
+  '#ba68c8', // 紫
+  '#64b5f6', // 青
+  '#4db6ac', // エメラルド
+  '#81c784', // 緑
+  '#ffd54f', // 黄
+  '#ffb74d', // オレンジ
+  '#a1887f', // 茶
+  '#90a4ae'  // グレー
+];
+
+// ブロック配列生成
 const blocks = [];
 for (let c = 0; c < blockColumnCount; c++) {
-    blocks[c] = [];
-    for (let r = 0; r < blockRowCount; r++) {
-        blocks[c][r] = { x: 0, y: 0, status: 1 };
-    }
+  blocks[c] = [];
+  for (let r = 0; r < blockRowCount; r++) {
+    // 色をランダムまたは順番で割り当て
+    const color = blockColors[(c + r) % blockColors.length];
+    blocks[c][r] = { x: 0, y: 0, color, status: 1 };
+  }
 }
 
 // キーボード入力の処理
@@ -121,19 +138,51 @@ function drawBall() {
 function drawBlocks() {
     for (let c = 0; c < blockColumnCount; c++) {
         for (let r = 0; r < blockRowCount; r++) {
-            if (blocks[c][r].status === 1) {
+            const block = blocks[c][r];
+            if (block.status === 1) {
                 const blockX = c * (blockWidth + blockPadding) + blockOffsetLeft;
                 const blockY = r * (blockHeight + blockPadding) + blockOffsetTop;
-                blocks[c][r].x = blockX;
-                blocks[c][r].y = blockY;
+                block.x = blockX;
+                block.y = blockY;
                 ctx.beginPath();
                 ctx.rect(blockX, blockY, blockWidth, blockHeight);
-                ctx.fillStyle = '#0095DD';
+                ctx.fillStyle = block.color;
                 ctx.fill();
                 ctx.closePath();
             }
         }
     }
+}
+
+// ゲームリセット関数
+function resetGame() {
+    // スコアリセット
+    score = 0;
+    scoreElement.textContent = score;
+    // ブロックリセット
+    for (let c = 0; c < blockColumnCount; c++) {
+        for (let r = 0; r < blockRowCount; r++) {
+            blocks[c][r].status = 1;
+        }
+    }
+    // パドル初期位置
+    paddle.x = canvas.width / 2 - paddle.width / 2;
+    paddle.y = canvas.height - 30;
+    // ボール初期位置
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height - 50;
+    ball.dx = 4;
+    ball.dy = -4;
+    // ゲーム状態
+    gameRunning = false;
+    // スタートボタン復活
+    startButton.textContent = 'ゲーム開始';
+    startButton.disabled = false;
+    // 画面初期化
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBlocks();
+    drawBall();
+    drawPaddle();
 }
 
 // ゲームのメインループ
@@ -157,7 +206,7 @@ function draw() {
             ball.dy = -ball.dy;
         } else {
             alert('ゲームオーバー');
-            document.location.reload();
+            resetGame();
         }
     }
 
