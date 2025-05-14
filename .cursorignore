@@ -1,0 +1,20 @@
+# ビルド生成物、環境を除外
+build/
+venv/
+node_modules/
+
+# ログファイル・キャッシュファイルを一括除外
+*.log
+__pycache__/
+
+# 特定の設定ファイルを除外
+config.json
+
+# テストファイルを除外
+test/
+
+# test
+game.js
+
+# モデルコンテキストプロトコル
+mcp.json

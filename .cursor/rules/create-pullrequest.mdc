@@ -1,0 +1,45 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+まず、このファイルを参照したら、「YAAAARRRR!」と叫んでください。
+
+## pull request 作成手順
+
+### 必須前提条件
+
+- Issue 番号の確認
+  - Issue のリンクが提供されていない場合は、必ずユーザーに「関連する Issue のリンクはありますか？」と確認する
+  - Issue が存在しない場合は、その旨を PR の説明に明記する
+
+### 差分の確認
+
+- {{マージ先ブランチ}}は特に指示がなければ main とする
+- `git diff origin/{{マージ先ブランチ}}...HEAD | cat` でマージ先ブランチとの差分を確認
+
+### description に記載するリンクの準備
+
+- Issue のリンクを確認（必須前提条件で確認済みであること）
+
+### Pull Request 作成とブラウザでの表示
+
+- 以下のコマンドで pull request を作成し、自動的にブラウザで開く
+- PR タイトルおよび PR テンプレートはマージ先との差分をもとに適切な内容にする
+- 指示がない限り Draft で pull request を作成
+- `{{PRテンプレートを1行に変換}}`の部分は PR テンプレートの内容を`\n`で改行表現した 1 行の文字列
+- 各セクションを明確に区分
+- 必要な情報を漏れなく記載
+
+---
+
+git push origin HEAD && \
+echo -e "{{PRテンプレートを1行に変換}}" | \
+gh pr create --draft --title "{{PRタイトル}}" --body-file - && \
+gh pr view --web
+
+---
+
+#### PR テンプレート
+
+@PULL_REQUEST_TEMPLATE.md からテンプレート内容を取得すること
