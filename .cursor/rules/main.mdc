@@ -8,4 +8,4 @@ alwaysApply: true
 ## ドメイン知識
 ユーザーから渡されたファイル内容を分析して適切なドメイン知識のルールを適用してください。
 - ユーザー関連の機能: .cursor/rules/domains/user.mdc
-- 決済関連の機能: .cursor/rules/domains/payment.mdc
+- 決済関連の機能: [payment.mdc](mdc:.cursor/rules/domans/payment.mdc)
